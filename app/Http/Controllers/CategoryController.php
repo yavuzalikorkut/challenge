@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Aspera\Spreadsheet\XLSX\Reader;
 use Aspera\Spreadsheet\XLSX\SharedStringsConfiguration;
@@ -17,6 +18,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
+
+        $toName = env('MAIL_TO_NAME');
+        $toEmail = env('MAIL_TO');
+
+
         $fileList = Storage::allFiles('categories');
 
         Storage::disk('local')->put('temp.xlsx', Storage::get($fileList[0]));
@@ -41,6 +47,12 @@ class CategoryController extends Controller
         }
 
         Storage::disk('local')->delete('temp.xlsx');
+
+        Mail::send([], [], function($message) use ($toName, $toEmail) {
+            $message->to($toEmail, $toName)->subject("Kategori Bilgilendirmesi");
+            $message->from($toEmail,"challenge email");
+        });
+
 
         return "Success";
     }
