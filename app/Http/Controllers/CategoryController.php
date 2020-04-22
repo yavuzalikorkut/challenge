@@ -24,9 +24,9 @@ class CategoryController extends Controller
         $reader = new Reader();
         $reader->open(storage_path('app/temp.xlsx'));
 
-        $reader->next(); $reader->next(); // ignore columns
+        $reader->next(); // ignore columns
 
-        foreach ($reader as $row) {
+        while (($row = $reader->next()) != false) {
             for ($i = 0; $i < count($row); ++$i) {
                 if ($row[$i] == "") {
                     break;
@@ -42,6 +42,7 @@ class CategoryController extends Controller
 
         Storage::disk('local')->delete('temp.xlsx');
 
+        return "Success";
     }
 
 }
