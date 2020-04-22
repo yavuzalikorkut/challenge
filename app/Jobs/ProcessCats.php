@@ -33,11 +33,6 @@ class ProcessCats implements ShouldQueue
      */
     public function handle()
     {
-
-        $toName = env('MAIL_TO_NAME');
-        $toEmail = env('MAIL_TO');
-
-
         $fileList = Storage::allFiles('categories');
 
         Storage::disk('local')->put('temp.xlsx', Storage::get($fileList[0]));
@@ -62,6 +57,10 @@ class ProcessCats implements ShouldQueue
         }
 
         Storage::disk('local')->delete('temp.xlsx');
+
+
+        $toName = env('MAIL_TO_NAME');
+        $toEmail = env('MAIL_TO');
 
         Mail::send([], [], function($message) use ($toName, $toEmail) {
             $message->to($toEmail, $toName)->subject("Kategori Bilgilendirmesi");

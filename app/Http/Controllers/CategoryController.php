@@ -22,7 +22,7 @@ class CategoryController extends Controller
         $this->dispatch(new ProcessCats());
 
         return response()->json([
-            'message' => 'Bilgileriniz Mernis kontrolünden geçirilerek tarafınıza e-posta gönderilecektir.'
+            'message' => 'agac veritabanina aktarildi'
         ], 200);
     }
 
