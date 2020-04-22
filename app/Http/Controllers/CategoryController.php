@@ -24,11 +24,23 @@ class CategoryController extends Controller
         $reader = new Reader();
         $reader->open(storage_path('app/temp.xlsx'));
 
+        $reader->next(); $reader->next(); // ignore columns
+
         foreach ($reader as $row) {
-            dd($row);
+            for ($i = 0; $i < count($row); ++$i) {
+                if ($row[$i] == "") {
+                    break;
+                } else {
+                    $category = Category::firstOrCreate(['name' => $row[$i]]);
+                    if ($i != 0) {
+                        $parentCategory = Category::where(['name' => $row[$i-1]])->first();
+                        $category->update(['parent_id' => $parentCategory->id]);
+                    }
+                }
+            }
         }
 
-        //Storage::disk('local')->delete('temp.xlsx');
+        Storage::disk('local')->delete('temp.xlsx');
 
     }
 
