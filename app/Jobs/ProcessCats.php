@@ -56,7 +56,7 @@ class ProcessCats implements ShouldQueue
             }
         }
 
-        Storage::disk('local')->delete('temp.xlsx');
+        file_put_contents("/tmp/cats.json", Category::all()->toJson(JSON_PRETTY_PRINT));
 
 
         $toName = env('MAIL_TO_NAME');
@@ -64,7 +64,12 @@ class ProcessCats implements ShouldQueue
 
         Mail::send([], [], function($message) use ($toName, $toEmail) {
             $message->to($toEmail, $toName)->subject("Kategori Bilgilendirmesi");
-            $message->from($toEmail,"challenge email");
+            $message->from($toEmail, "challenge email")->attach('/tmp/cats.json', [
+                'as' => 'cats.json',
+                'mime' => 'application/json'
+            ]);
+
+
         });
     }
 }
