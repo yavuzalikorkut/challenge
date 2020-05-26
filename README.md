@@ -1,11 +1,9 @@
 
-## CHALLANGE
+## Simple ftp data file handler
 
-FTP’de ki Excel dosyası olan kategori ağacını veritabanına aktarır ve sistem yöneticisine bildirim gönderir
+It transfers category tree in FTP to db and sends a notification with mail
 
-
-
-## TO RUN 
+## To run 
 ```bash
 cp .env.example .env
 
